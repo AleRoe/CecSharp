@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net5.0;netstandard2.1</TargetFrameworks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Alexander Röthinger</Authors>
+    <Copyright>Alexander Röthinger, 2021</Copyright>
+    <Description>A class library to faciliate HDMI-CEC communications.</Description>
+    <PackageProjectUrl>https://github.com/AleRoe/CecSharp</PackageProjectUrl>
+    <PackageOutputPath>C:\Users\Alexander\Source\LocalPackages</PackageOutputPath>
+    <Version>1.0.7</Version>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <Company>AleRoe</Company>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/AleRoe/CecSharp</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="morelinq" Version="3.3.2" />
+  </ItemGroup>
+
+</Project>

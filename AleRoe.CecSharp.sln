@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29509.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AleRoe.CecSharp", "AleRoe.CecSharp\AleRoe.CecSharp.csproj", "{B693268F-1B09-4AA3-96E2-18A24ABB5F65}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AleRoe.CecSharp.Tests", "AleRoe.CecSharp.Tests\AleRoe.CecSharp.Tests.csproj", "{37E4B079-9A29-4E04-AD33-66567983160B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B693268F-1B09-4AA3-96E2-18A24ABB5F65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B693268F-1B09-4AA3-96E2-18A24ABB5F65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B693268F-1B09-4AA3-96E2-18A24ABB5F65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B693268F-1B09-4AA3-96E2-18A24ABB5F65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37E4B079-9A29-4E04-AD33-66567983160B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37E4B079-9A29-4E04-AD33-66567983160B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37E4B079-9A29-4E04-AD33-66567983160B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37E4B079-9A29-4E04-AD33-66567983160B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7ED79C46-7FCF-41B6-A92A-D2B08DC5549B}
+	EndGlobalSection
+EndGlobal
