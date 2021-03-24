@@ -6,15 +6,17 @@
     <Authors>Alexander Röthinger</Authors>
     <Copyright>Alexander Röthinger, 2021</Copyright>
     <Description>A class library to faciliate HDMI-CEC communications.</Description>
-    <PackageProjectUrl>https://github.com/AleRoe/CecSharp</PackageProjectUrl>
+    <PackageProjectUrl>https://aleroe.github.io/CecSharp/</PackageProjectUrl>
     <PackageOutputPath>C:\Users\Alexander\Source\LocalPackages</PackageOutputPath>
-    <Version>1.0.7</Version>
+    <Version>1.0.71</Version>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <Company>AleRoe</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/AleRoe/CecSharp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageTags>cec;dotnet;hdmi-cec</PackageTags>
+    <PackageLicenseFile></PackageLicenseFile>
   </PropertyGroup>
   
   <ItemGroup>
