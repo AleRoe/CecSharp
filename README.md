@@ -5,10 +5,11 @@ A .net class library to facilitate HDMI-CEC communications.
 This library can be used to create and parse HDMI Version 1.4 compliant CEC-messages for communication with HDMI-CEC devices.
 
 ### Installing via NuGet
-
+```csharp
 Install-Package AleRoe.CecSharp
+```
 
-## Basic Usage
+### Basic Usage
 Use the static `CecMessageBuilder` class to build `CecMessage` structs.
 
 ```csharp
@@ -39,5 +40,3 @@ var message = CecMessageBuilder.ActiveSource(LogicalAddress.Unregistered, Physic
 var cec = message.ToCec();
 // cec = "FF:82:20:00"
 ```
-## Platform Support
-The API is supported on all platforms.
