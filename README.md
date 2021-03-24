@@ -4,8 +4,9 @@ A .net class library to facilitate HDMI-CEC communications.
 ## Overview
 This library can be used to create and parse HDMI Version 1.4 compliant CEC-messages for communication with HDMI-CEC devices.
 
-### Installation
-NuGet package to follow shortly.
+### Installing via NuGet
+
+Install-Package AleRoe.CecSharp
 
 ## Basic Usage
 Use the static `CecMessageBuilder` class to build `CecMessage` structs.
