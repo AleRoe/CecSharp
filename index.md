@@ -1,37 +1,42 @@
-## Welcome to GitHub Pages
+# CecSharp
+A .net class library to facilitate HDMI-CEC communications. 
 
-You can use the [editor on GitHub](https://github.com/AleRoe/CecSharp/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+## Overview
+This library can be used to create and parse HDMI Version 1.4 compliant CEC-messages for communication with HDMI-CEC devices.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+### Installing via NuGet
+```csharp
+Install-Package AleRoe.CecSharp
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+### Basic Usage
+Use the static `CecMessageBuilder` class to build `CecMessage` structs.
 
-### Jekyll Themes
+```csharp
+public static class CecMessageBuilder
+{
+    public static CecMessage GivePhysicalAddress(LogicalAddress source, LogicalAddress destination);
+    public static CecMessage ReportPhysicalAddress(LogicalAddress source, DeviceType deviceType, PhysicalAddress physicalAddress);
+    public static CecMessage ReportAudioStatus(LogicalAddress source, LogicalAddress destination, AudioMuteStatus status, int value);
+    public static CecMessage SetSystemAudioMode(LogicalAddress source, LogicalAddress destination, SystemAudioStatus status);
+    public static CecMessage DeviceVendorId(LogicalAddress source, int vendorId);
+    public static CecMessage SetOsdName(LogicalAddress source, LogicalAddress destination, string osdName);
+    public static CecMessage MenuStatus(LogicalAddress source, LogicalAddress destination, MenuStatus state);
+    public static CecMessage InactiveSource(LogicalAddress source, PhysicalAddress physicalAddress);
+    public static CecMessage ActiveSource(LogicalAddress source, PhysicalAddress physicalAddress);
+    public static CecMessage FeatureAbort(LogicalAddress source, LogicalAddress destination, Command opCode, AbortReason reason);
+    public static CecMessage CecVersion(LogicalAddress source, LogicalAddress destination, CecVersion version);
+    public static CecMessage ReportPowerStatus(LogicalAddress source, LogicalAddress destination, PowerStatus status);
+    public static CecMessage Polling(LogicalAddress source);
+}
+```
+Use the `.ToCec()` extension method to get the actual CEC-Message.
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/AleRoe/CecSharp/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+```csharp
+using AleRoe.CecSharp;
+using AleRoe.CecSharp.Extensions;
 
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+var message = CecMessageBuilder.ActiveSource(LogicalAddress.Unregistered, PhysicalAddress.Parse("2.0.0.0"));
+var cec = message.ToCec();
+// cec = "FF:82:20:00"
+```
