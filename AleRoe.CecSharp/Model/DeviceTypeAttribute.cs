@@ -6,6 +6,7 @@ namespace AleRoe.CecSharp.Model
     /// An attribute used to map a <see cref="LogicalAddress"/> with its corresponding <see cref="DeviceType"/>.
     /// </summary>
     /// <seealso cref="System.Attribute" />
+    [AttributeUsage(AttributeTargets.Field)]
     internal class DeviceTypeAttribute : Attribute
     {
         /// <summary>
