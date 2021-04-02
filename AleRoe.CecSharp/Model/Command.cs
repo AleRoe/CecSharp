@@ -338,7 +338,7 @@
         /// <summary>
         /// Allows vendor specific commands to be sent between two devices or broadcast (Directly addressed or Broadcast)
         /// </summary>
-        VendorCommandWithId = 0x0A,
+        VendorCommandWithId = 0xA0,
 
         /// <summary>
         /// Indicates that a remote control button has been depressed (Directly addressed or Broadcast)
