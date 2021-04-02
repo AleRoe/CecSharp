@@ -3,7 +3,7 @@ using AleRoe.CecSharp.Extensions;
 using AleRoe.CecSharp.Model;
 using NUnit.Framework;
 
-namespace AleRoe.CecSharp.Tests.Model
+namespace AleRoe.CecSharp.Tests
 {
     [TestFixture]
     public class CecMessageTests
@@ -143,60 +143,71 @@ namespace AleRoe.CecSharp.Tests.Model
         }
 
         [Test]
-        public void EqualsTest1()
+        public void EqualsTest_NoneValuesAreEqual()
         {
-            //var msg = "* cec:message A 16:02:26.740 33#";
+            CecMessage message1 = CecMessage.None;
+            CecMessage message2 = CecMessage.None;
+            Assert.AreEqual(message1, message2);
+            Assert.IsTrue(message1.Equals(message2));
+            Assert.IsTrue(Equals(message1, message2));
+        }
+
+        [Test]
+        public void EqualsTest_ValuesAreEqual()
+        {
+            CecMessage message1 = CecMessageBuilder.CecVersion(LogicalAddress.PlaybackDevice1, LogicalAddress.TV, CecVersion.Version14);
+            CecMessage message2 = CecMessageBuilder.CecVersion(LogicalAddress.PlaybackDevice1, LogicalAddress.TV, CecVersion.Version14);
+            Assert.AreEqual(message1, message2);
+            Assert.IsTrue(message1.Equals(message2));
+            Assert.IsTrue(Equals(message1, message2));
+        }
+
+        [Test]
+        public void EqualsTest_DefaultValuesAreEqual()
+        {
             CecMessage message1 = default;
             CecMessage message2 = default;
-            var result = false;
-            Assert.DoesNotThrow(() => result = message1.Equals(message2));
-            Assert.IsTrue(result);
+            Assert.AreEqual(message1, message2);
+            Assert.IsTrue(message1.Equals(message2));
+            Assert.IsTrue(Equals(message1, message2));
         }
 
+        
         [Test]
-        public void EqualsTest2()
+        public void NotEqualsTest_Success()
         {
-            var msg = "33#";
             var message1 = CecMessage.None;
-            var message2 = CecMessage.Parse(msg);
-            
-            var result = false;
-            Assert.DoesNotThrow(() => result = message1.Equals(message2));
-            Assert.IsFalse(result);
+            var message2 = CecMessage.Parse("33#");
+
+            Assert.AreNotEqual(message1, message2);
+            Assert.IsFalse(message1.Equals(message2));
+            Assert.IsFalse(Equals(message1, message2));
         }
 
         [Test]
-        public void EqualsTest3()
+        public void NotEqualsTest_WrongTypesAreNotEqual()
         {
             var message1 = CecMessage.None;
             var message2 = Guid.NewGuid();
-
-            var result = false;
-            Assert.DoesNotThrow(() => result = message1.Equals(message2 as object));
-            Assert.IsFalse(result);
+            Assert.AreNotEqual(message1, message2);
+            Assert.IsFalse(message1.Equals(message2));
+            Assert.IsFalse(Equals(message1, message2));
         }
 
         [Test]
-        public void OperatorTest1()
+        public void OperatorTest_ValuesAreEqual()
         {
             var message1 = CecMessage.None;
             var message2 = CecMessage.None;
-
-            var result = false;
-            Assert.DoesNotThrow(() => result = message1 == message2);
-            Assert.IsTrue(result);
+            Assert.IsTrue(message1 == message2);
         }
 
         [Test]
-        public void OperatorTest2()
+        public void OperatorTest_ValuesAreNotEqual()
         {
             CecMessage message1 = CecMessage.None;
             CecMessage message2 = default;
-
-            var result = false;
-            Assert.DoesNotThrow(() => result = message1 != message2);
-            Assert.IsTrue(result);
+            Assert.IsTrue(message1 != message2);
         }
-
     }
 }
