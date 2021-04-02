@@ -1,5 +1,4 @@
-﻿using System;
-using AleRoe.CecSharp.Model;
+﻿using AleRoe.CecSharp.Model;
 
 namespace AleRoe.CecSharp.Extensions
 {
