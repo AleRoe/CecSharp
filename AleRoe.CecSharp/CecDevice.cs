@@ -50,7 +50,7 @@ namespace AleRoe.CecSharp
             OsdName = osdName;
             VendorId = vendorId;
             PhysicalAddress = physicalAddress;
-            LogicalAddress = LogicalAddress;
+            LogicalAddress = logicalAddress;
             PowerStatus = PowerStatus.Standby;
         }
 
