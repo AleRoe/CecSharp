@@ -1,7 +1,7 @@
 ﻿namespace AleRoe.CecSharp.Model
 {
     /// <summary>
-    /// Available CEC commands
+    /// Available CEC commands.
     /// </summary>
     public enum Command : byte
     {

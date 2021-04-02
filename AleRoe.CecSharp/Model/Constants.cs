@@ -1,5 +1,8 @@
 ﻿namespace AleRoe.CecSharp.Model
 {
+    /// <summary>
+    /// Common character constants.
+    /// </summary>
     internal static class Constants
     {
         public const char SectionDelimiter = ' '; // (char)32;

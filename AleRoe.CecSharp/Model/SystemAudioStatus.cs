@@ -1,7 +1,7 @@
 ﻿namespace AleRoe.CecSharp.Model
 {
     /// <summary>
-    /// CEC system audio mute status values
+    /// CEC system audio mute status values.
     /// </summary>
     public enum SystemAudioStatus : byte
     {

@@ -1,5 +1,8 @@
 ﻿namespace AleRoe.CecSharp.Model
 {
+    /// <summary>
+    /// CEC abort reason values.
+    /// </summary>
     public enum AbortReason : byte
     {
         UnrecognizedOpcode = 0x00,

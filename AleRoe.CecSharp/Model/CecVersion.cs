@@ -1,7 +1,7 @@
 ﻿namespace AleRoe.CecSharp.Model
 {
     /// <summary>
-    /// Available CEC versions
+    /// Available CEC versions.
     /// </summary>
     public enum CecVersion : byte
     {

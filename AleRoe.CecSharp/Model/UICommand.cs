@@ -1,5 +1,8 @@
 ﻿namespace AleRoe.CecSharp.Model
 {
+    /// <summary>
+    /// CEC UI command values.
+    /// </summary>
     public enum UiCommand : byte
     {
         Select = 0x00,

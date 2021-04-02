@@ -1,7 +1,7 @@
 ﻿namespace AleRoe.CecSharp.Model
 {
     /// <summary>
-    /// CEC logical addresses
+    /// Available CEC logical addresses.
     /// </summary>
     public enum LogicalAddress : byte
     {

@@ -9,10 +9,10 @@ namespace AleRoe.CecSharp.Extensions
     public static class CecMessageExtensions
     {
         /// <summary>
-        /// Converts to cec.
+        /// Converts the given <see cref="CecMessage"/> to a HDMI-CEC frame.
         /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns></returns>
+        /// <param name="value">The <see cref="CecMessage"/> value.</param>
+        /// <returns>A <see cref="System.String"/> value representing the HDMI-CEC frame.</returns>
         public static string ToCec(this CecMessage value)
         {
             var builder = new StringBuilder();
