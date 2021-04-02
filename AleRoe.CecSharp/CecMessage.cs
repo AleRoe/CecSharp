@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -172,7 +173,7 @@ namespace AleRoe.CecSharp
                 && Equals(Destination, value.Destination)
                 && Equals(Command, value.Command)
                 && Equals(IsAcknowledged(), value.IsAcknowledged())
-                && Equals(Parameters, value.Parameters);
+                && StructuralComparisons.StructuralEqualityComparer.Equals(Parameters, value.Parameters);
         }
 
         /// <inheritdoc/>
@@ -212,7 +213,7 @@ namespace AleRoe.CecSharp
         /// </returns>
         public static bool operator !=(CecMessage left, CecMessage right)
         {
-            return !(left == right);
+            return !left.Equals(right);
         }
     }
 }

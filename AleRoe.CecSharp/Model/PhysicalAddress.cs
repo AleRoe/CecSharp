@@ -28,22 +28,28 @@ namespace AleRoe.CecSharp.Model
         /// Gets an unassigned physical address.
         /// </summary>
         public static PhysicalAddress None => Parse("F.F.F.F");
+        
 
-        internal static PhysicalAddress TV => Parse("1.0.0.0");
-
-        /// <inheritdoc/>
+        /// <summary>
+        /// Converts this instance to a string in the format "n.n.n.n"
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
-            var result = (Address.Item1.ToString("X2") + Address.Item2.ToString("X2")).Select(x => x.ToString())
+            var result = (Address.Item1.ToString("X2") + Address.Item2.ToString("X2"))
+                .Select(x => x.ToString())
                 .ToArray();
             return string.Join(".", result);
         }
 
         /// <summary>
-        /// Converts the string representation of a <c>PhysicalAddress</c> to the equivalent <see cref="PhysicalAddress"/> structure.
+        /// Converts the string representation of a <c>PhysicalAddress</c> to the equivalent <see cref="PhysicalAddress"/> struct.
         /// </summary>
-        /// <param name="value">The string to convert. Must be in x.x.x.x format.</param>
+        /// <param name="value">The string to convert. Must be in n.n.n.n format.</param>
         /// <returns>A <c>PhysicalAddress</c> structure that contains the value that was parsed.</returns>
+        /// <exception cref="FormatException"></exception>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="ArgumentNullException"></exception>
         public static PhysicalAddress Parse(string value)
@@ -52,8 +58,8 @@ namespace AleRoe.CecSharp.Model
                 throw new ArgumentNullException(nameof(value));
 
             var segments = value.Split(new[] { Constants.AddressDelimiter });
-            if (segments.Length != 4)
-                throw new ArgumentException("Invalid Address format.");
+            if (segments.Length != 4 || value.Length != 7)
+                throw new ArgumentException("Value is not in the format n.n.n.n");
 
             var firstByte = Convert.ToByte(segments[0] + segments[1], 16);
             var secondByte = Convert.ToByte(segments[2] + segments[3], 16);
@@ -93,7 +99,7 @@ namespace AleRoe.CecSharp.Model
             if (value.GetType() != this.GetType())
                 return false;
 
-            return Equals((CecMessage)value);
+            return Equals((PhysicalAddress)value);
         }
 
         /// <summary>
@@ -121,17 +127,5 @@ namespace AleRoe.CecSharp.Model
         {
             return !(left == right);
         }
-
-        //public static ValueTuple<byte, byte> Parse(string address)
-        //{
-        //    var segments = address.Split(new[] {'.'});
-        //    if (segments.Length != 4)
-        //        throw new ArgumentException("Invalid Address");
-
-        //    var firstByte = Convert.ToByte(segments[0] + segments[1], 16);
-        //    var secondByte = Convert.ToByte(segments[2] + segments[3], 16);
-
-        //    return (firstByte, secondByte);
-        //}
     }
 }

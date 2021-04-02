@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using AleRoe.CecSharp.Extensions;
@@ -39,6 +40,7 @@ namespace AleRoe.CecSharp
         /// <returns>A <c>EdidMessage</c> structure that contains the value that was parsed.</returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="FormatException"></exception>
         public static EdidMessage Parse(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
@@ -100,7 +102,7 @@ namespace AleRoe.CecSharp
         public bool Equals([AllowNull] EdidMessage value)
         {
             return Equals(Block, value.Block)
-                   && Equals(Data, value.Data);
+            && StructuralComparisons.StructuralEqualityComparer.Equals(Data, value.Data);
         }
 
         /// <summary>
@@ -126,7 +128,7 @@ namespace AleRoe.CecSharp
         /// </returns>
         public static bool operator !=(EdidMessage left, EdidMessage right)
         {
-            return !(left == right);
+            return !left.Equals(right);
         }
     }
 }
