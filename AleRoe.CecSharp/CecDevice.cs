@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using AleRoe.CecSharp.Extensions;
 using AleRoe.CecSharp.Model;
 
@@ -13,6 +15,8 @@ namespace AleRoe.CecSharp
     /// </summary>
     public sealed class CecDevice : ICecDevice
     {
+        private LogicalAddress logicalAddress;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CecDevice"/> class.
         /// </summary>
@@ -51,7 +55,6 @@ namespace AleRoe.CecSharp
             VendorId = vendorId;
             PhysicalAddress = physicalAddress;
             LogicalAddress = logicalAddress;
-            PowerStatus = PowerStatus.Standby;
         }
 
         /// <summary>
@@ -72,7 +75,22 @@ namespace AleRoe.CecSharp
         /// <summary>
         /// Gets or sets the logical device address.
         /// </summary>
-        public LogicalAddress LogicalAddress { get; set; }
+        public LogicalAddress LogicalAddress
+        {
+            get => logicalAddress;
+            set
+            {
+                if (value != LogicalAddress.Unregistered)
+                {
+                    var attr = value.GetAttribute<DeviceTypeAttribute>();
+                    if (attr.DeviceType != this.DeviceType)
+                    {
+                        throw new InvalidOperationException("The LogicalAddress does not match the current DeviceType");
+                    }
+                }
+                logicalAddress = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the physical device address.
@@ -92,8 +110,20 @@ namespace AleRoe.CecSharp
         /// <summary>
         /// Gets or sets the power status of the device.
         /// </summary>
-        public PowerStatus PowerStatus { get; set; }
-    
+        public PowerStatus PowerStatus { get; set; } = PowerStatus.Standby;
+
+        /// <summary>
+        /// Gets or sets the state of the menu.
+        /// </summary>
+        public MenuState MenuState { get; set; } = MenuState.Deactivated;
+
+        /// <summary>
+        /// Gets the iso language.
+        /// </summary>
+        /// <value>
+        /// The iso language.
+        /// </value>
+        public string Language { get; internal set; } = CultureInfo.CurrentUICulture.ThreeLetterISOLanguageName;
 
         /// <summary>
         /// Processes an incoming CecMessage according to CEC Specifications
@@ -110,11 +140,7 @@ namespace AleRoe.CecSharp
                     //Report physical address
                     case Command.GivePhysicalAddress:
                         return this.ReportPhysicalAddress();
-
-                    //Vendor Command
-                    case Command.VendorCommand:
-                        return this.FeatureAbort(message.Source, Command.VendorCommand, AbortReason.InvalidOperand);
-
+              
                     //Report VendorID
                     case Command.GiveDeviceVendorId:
                         return this.DeviceVendorId();
@@ -124,9 +150,22 @@ namespace AleRoe.CecSharp
                         return this.SetOsdName(message.Source);
 
                     //get menu language -> aborted
+                    //Devices which have Logical Addresses other than 0 (TV) or 14 (when a TV) shall send a <Feature Abort >[“Unrecognized opcode”]
+                    //message in response to a < Get Menu Language> messages and shall not send < Set Menu Language> messages.
                     case Command.GetMenuLanguage:
-                        return this.FeatureAbort(message.Source, Command.GetMenuLanguage, AbortReason.InvalidOperand);
+                        if (LogicalAddress == LogicalAddress.TV || (LogicalAddress == LogicalAddress.FreeUse & DeviceType == DeviceType.TV))
+                        {
+                            return this.SetMenuLanguage(Language);
+                        }
+                        return this.FeatureAbort(message.Source, Command.GetMenuLanguage, AbortReason.UnrecognizedOpcode);
 
+                    
+                    //Commands only relevant if device is a TV.
+                    //We ignore these for now.
+                    case Command.SetOSDString:
+                    case Command.SetOSDName:
+                        return CecMessage.None;
+                        
                     //get CEC Version
                     case Command.GetCecVersion:
                         return this.CecVersion(message.Source);
@@ -140,18 +179,38 @@ namespace AleRoe.CecSharp
                     case Command.GiveTunerDeviceStatus:
                         return this.ReportPowerStatus(message.Source, this.PowerStatus);
 
+                    case Command.MenuRequest:
+                        var type = (MenuRequestType)message.Parameters[0];
+                        if (type == MenuRequestType.Activate)
+                        {
+                            this.MenuState = MenuState.Activated;
+                        }
+                        else if (type == MenuRequestType.Deactivate)
+                        {
+                            this.MenuState = MenuState.Deactivated;
+                        }
+                        return this.MenuStatus(MenuState);
+
                     //messages from other devices that we can ignore
                     case Command.FeatureAbort:
                     case Command.ReportPowerStatus:
                     case Command.CecVersion:
+                    case Command.DeviceVendorId:
                     case Command.None:
                         return CecMessage.None;
 
                     //messages which are passed thru
                     case Command.UserControlPressed:
                     case Command.UserControlReleased:
-                    case Command.StandBy:
+                    case Command.VendorCommand:
+                    case Command.VendorCommandWithId:
+                    case Command.VendorRemoteButtonDown:
+                    case Command.VendorRemoteButtonUp:
                     break;
+
+                    case Command.StandBy:
+                        PowerStatus = PowerStatus.Standby;
+                        return CecMessage.None;
 
                     default:
                         return this.FeatureAbort(message.Source, message.Command, AbortReason.UnrecognizedOpcode);
@@ -185,13 +244,29 @@ namespace AleRoe.CecSharp
                         if (IsActiveSource)
                             return this.ActiveSource();
                         break;
+                    
+                    //set menu language for this device
+                    case Command.SetMenuLanguage:
+                        this.Language = Encoding.ASCII.GetString(message.Parameters);
+                        break;
+
+                    //invalid broadcasts
+                    case Command.GetMenuLanguage:
+                        return CecMessage.None;
+
+                    //invalid broadcasts
+                    case Command.RoutingInformation:
+                        throw new NotSupportedException($"{nameof(CecDevice)} does not support Switch behaviour.");
+
+                    case Command.StandBy:
+                        PowerStatus = PowerStatus.Standby;
+                        return CecMessage.None;
 
                     //broadcast messages from other devices that we can ignore
                     case Command.DeviceVendorId:
                     case Command.ReportPhysicalAddress:
                     case Command.ReportPowerStatus:
-                    case Command.SetMenuLanguage:
-                    case Command.StandBy:
+                    
                         break;
                     
                     default:
