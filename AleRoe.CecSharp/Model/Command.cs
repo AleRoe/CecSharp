@@ -8,11 +8,13 @@
         /// <summary>
         /// Used by a new source to indicate that it has started to transmit a stream OR used in response to a "Request Active Source" (Broadcast). This message is used in several features : One Touch Play,Routing Control
         /// </summary>
+        [Features(Features.RoutingControl)]
         ActiveSource = 0x82,
 
         /// <summary>
         /// Used to indicate the supported CEC version, in response to a "Get CEC Version" (Directly addressed)
         /// </summary>
+        [Features(Features.SystemInformation)]
         CecVersion = 0x9E,
 
         /// <summary>
@@ -43,21 +45,26 @@
         /// <summary>
         /// Reports the Vendor ID of this device (Broadcast)
         /// </summary>
+        [Features(Features.VendorSpecificCommand)]
         DeviceVendorId = 0x87,
 
         /// <summary>
         /// Used as a response to indicate that the device does not support the requested message type, or that it cannot execute it at the present time (Directly addressed)
         /// </summary>
+        [Features(Features.Abort)]
         FeatureAbort = 0x00,
 
         /// <summary>
         /// Used by a device to inquire which version of CEC the target supports (Directly addressed)
         /// </summary>
+        [Features(Features.SystemInformation)]
         GetCecVersion = 0x9F,
 
         /// <summary>
         /// Sent by a device capable of character generation (for OSD and Menus) to a TV in order to discover the currently selected Menu language. Also used by a TV during installation to discover the currently set menu language from other devices (Directly addressed)
         /// </summary>
+        /// <remarks>Devices which have Logical Addresses other than 0 (TV) or 14 (when a TV) shall send a FeatureAbort[“Unrecognized opcode”] message in response to a GetMenuLanguage messages and shall not send SetMenuLanguage messages.</remarks>
+        [Features(Features.SystemInformation)]
         GetMenuLanguage = 0x91,
 
         /// <summary>
@@ -73,21 +80,25 @@
         /// <summary>
         /// Used to determine the current power status of a target device (Directly addressed)
         /// </summary>
+        [Features(Features.DevicePowerStatus)]
         GiveDevicePowerStatus = 0x8F,
 
         /// <summary>
         /// Requests the Vendor ID from a device (Directly addressed)
         /// </summary>
+        [Features(Features.VendorSpecificCommand)]
         GiveDeviceVendorId = 0x8C,
 
         /// <summary>
         /// Used to request the preferred OSD name of a device for use in menus associated with that device (Directly addressed)
         /// </summary>
+        [Features(Features.DeviceOsdNameTransfer)]
         GiveOsdName = 0x46,
 
         /// <summary>
         /// A request to a device to return its physical address. (Directly addressed)
         /// </summary>
+        [Features(Features.SystemInformation)]
         GivePhysicalAddress = 0x83,
 
         /// <summary>
@@ -108,16 +119,19 @@
         /// <summary>
         /// Used by the currently active source to inform the TV that it has no video to be presented to the user, or is going into standby as the result of a local user command on the device (Directly addressed)
         /// </summary>
+        [Features(Features.RoutingControl)]
         InactiveSource = 0x9D,
 
         /// <summary>
         ///  A request from the TV for a device to show/remove a menu or to query if a device is currently showing a menu (Directly addressed)
         /// </summary>
+        [Features(Features.DeviceMenuControl)]
         MenuRequest = 0x8D,
 
         /// <summary>
         /// Used to indicate to the TV that the device is showing/has removed a menu and requests the remote control keys to be passed though (Directly addressed)
         /// </summary>
+        [Features(Features.DeviceMenuControl)]
         MenuStatus = 0x8E,
         
         /// <summary>
@@ -168,6 +182,7 @@
         /// <summary>
         /// Used to inform all other devices of the mapping between physical and logical address of the initiator (Broadcast)
         /// </summary>
+        [Features(Features.SystemInformation)]
         ReportPhysicalAddress = 0x84,
 
         /// <summary>
@@ -198,21 +213,25 @@
         /// <summary>
         /// Used to inform a requesting device of the current power status (Directly addressed)
         /// </summary>
+        [Features(Features.DevicePowerStatus)]
         ReportPowerStatus = 0x90,
 
         /// <summary>
         /// Used by a new device to discover the status of the system (Broadcast)
         /// </summary>
+        [Features(Features.RoutingControl)]
         RequestActiveSource = 0x85,
 
         /// <summary>
         /// Sent by a CEC Switch when it is manually switched to inform all other devices on the network that the active route below the switch has changed (Broadcast)
         /// </summary>
+        [Features(Features.RoutingControl)]
         RoutingChange = 0x80,
 
         /// <summary>
         /// Sent by a CEC Switch to indicate the active route below the switch (Broadcast)
         /// </summary>
+        [Features(Features.RoutingControl)]
         RoutingInformation = 0x81,
 
         /// <summary>
@@ -248,21 +267,25 @@
         /// <summary>
         /// Used by a TV or another device to indicate the menu language (Broadcast)
         /// </summary>
+        [Features(Features.SystemInformation)]
         SetMenuLanguage = 0x32,
 
         /// <summary>
         /// Used to set the preferred OSD name of a device for use in menus associated with that device (Directly addressed)
         /// </summary>
+        [Features(Features.DeviceOsdNameTransfer)]
         SetOSDName = 0x47,
 
         /// <summary>
         ///  Used to send a text message to output on a TV (Directly addressed)
         /// </summary>
+        [Features(Features.OsdDisplay)]
         SetOSDString = 0x64,
 
         /// <summary>
         /// Used by the TV to request a streaming path from the specified address (Broadcast)
         /// </summary>
+        [Features(Features.RoutingControl)]
         SetStreamPath = 0x86,
 
         /// <summary>
@@ -278,6 +301,7 @@
         /// <summary>
         /// Switches one or all devices into standby mode. Can be used a broadcast message or be addressed to a specific device (Broadcast or Directly addressed)
         /// </summary>
+        [Features(Features.SystemStandby)]
         StandBy = 0x36,
 
         /// <summary>
@@ -323,31 +347,37 @@
         /// <summary>
         /// Used to indicate that the user pressed a remote control button or switched from one remote control button to another (Directly addressed). This message is used in several features : Device Menu Control,System Audio Control,Remote Control Pass Through
         /// </summary>
+        [Features(Features.DeviceMenuControl)]
         UserControlPressed = 0x44,
 
         /// <summary>
         ///  Indicates that user released a remote control button (the last one indicated by the "User Control Pressed" message) (Directly addressed). This message is used in several features : Device Menu Control,System Audio Control,Remote Control Pass Through
         /// </summary>
+        [Features(Features.DeviceMenuControl)]
         UserControlReleased = 0x45,
 
         /// <summary>
         /// Allows vendor specific commands to be sent between two devices (Directly addressed)
         /// </summary>
+        [Features(Features.VendorSpecificCommand)]
         VendorCommand = 0x89,
 
         /// <summary>
         /// Allows vendor specific commands to be sent between two devices or broadcast (Directly addressed or Broadcast)
         /// </summary>
+        [Features(Features.VendorSpecificCommand)]
         VendorCommandWithId = 0xA0,
 
         /// <summary>
         /// Indicates that a remote control button has been depressed (Directly addressed or Broadcast)
         /// </summary>
+        [Features(Features.VendorSpecificCommand)]
         VendorRemoteButtonDown = 0x8A,
 
         /// <summary>
         ///  Indicates that a remote control button (the last button pressed indicated by the "Vendor Remote Button Down" message) has been released (Directly addressed or Broadcast)
         /// </summary>
+        [Features(Features.VendorSpecificCommand)]
         VendorRemoteButtonUp = 0x8B
     }
 }
