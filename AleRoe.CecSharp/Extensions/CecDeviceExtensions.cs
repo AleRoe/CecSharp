@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using AleRoe.CecSharp.Model;
 
 namespace AleRoe.CecSharp.Extensions
@@ -66,12 +67,11 @@ namespace AleRoe.CecSharp.Extensions
 
         /// <inheritdoc cref="Command.MenuStatus"/>
         /// <param name="device">The device.</param>
-        /// <param name="destination">The destination address.</param>
         /// <param name="status">The menu status.</param>
         /// <returns>A <see cref="CecMessage"/> object representing the command.</returns>
-        public static CecMessage MenuStatus(this CecDevice device, LogicalAddress destination, MenuStatus status)
+        public static CecMessage MenuStatus(this CecDevice device, MenuState status)
         {
-            return CecMessageBuilder.MenuStatus(device.LogicalAddress, destination, status);
+            return CecMessageBuilder.MenuStatus(device.LogicalAddress, status);
         }
 
         /// <inheritdoc cref="Command.InactiveSource"/>
@@ -137,6 +137,15 @@ namespace AleRoe.CecSharp.Extensions
         public static CecMessage Polling(this CecDevice device, LogicalAddress address)
         {
             return CecMessageBuilder.Polling(address);
+        }
+
+        /// <inheritdoc cref="Command.ReportPowerStatus"/>
+        /// <param name="device">The device.</param>
+        /// <param name="language">The ISO-639-2 language code.</param>
+        /// <returns>A <see cref="CecMessage"/> object representing the command.</returns>
+        public static CecMessage SetMenuLanguage(this CecDevice device, [NotNull] string language)
+        {
+            return CecMessageBuilder.SetMenuLanguage(device.LogicalAddress, language);
         }
     }
 }
