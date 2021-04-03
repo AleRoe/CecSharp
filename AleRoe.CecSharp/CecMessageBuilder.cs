@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using AleRoe.CecSharp.Extensions;
 using AleRoe.CecSharp.Model;
@@ -68,7 +70,7 @@ namespace AleRoe.CecSharp
                 ByteArrayHelper.ToByteArray(vendorId, "X6"));
         }
 
-        /// <inheritdoc cref="Command.SetSystemAudioMode"/>
+        /// <inheritdoc cref="Command.SetOSDName"/>
         /// <param name="source">The <c>CecMessage</c> source.</param>
         /// <param name="destination">The <c>CecMessage</c> destination.</param>
         /// <param name="osdName">Name OSD name of the device.</param>
@@ -80,12 +82,21 @@ namespace AleRoe.CecSharp
 
         /// <inheritdoc cref="Command.MenuStatus"/>
         /// <param name="source">The <c>CecMessage</c> source.</param>
-        /// <param name="destination">The <c>CecMessage</c> destination.</param>
         /// <param name="state">The state.</param>
         /// <returns>A <c>CecMessage</c> that represents the command.</returns>
-        public static CecMessage MenuStatus(LogicalAddress source, LogicalAddress destination, MenuStatus state)
+        public static CecMessage MenuStatus(LogicalAddress source, MenuState state)
         {
-            return new CecMessage(source, destination, Command.MenuStatus, ByteArrayHelper.ToByteArray(state));
+            return new CecMessage(source, LogicalAddress.TV, Command.MenuStatus, ByteArrayHelper.ToByteArray(state));
+        }
+
+        /// <inheritdoc cref="Command.MenuRequest"/>
+        /// <param name="source">The <c>CecMessage</c> source.</param>
+        /// <param name="destination">The <c>CecMessage</c> destination.</param>
+        /// <param name="type">The menu request type.</param>
+        /// <returns>A <c>CecMessage</c> that represents the command.</returns>
+        public static CecMessage MenuRequest(LogicalAddress destination, MenuRequestType  type)
+        {
+            return new CecMessage(LogicalAddress.TV, destination, Command.MenuRequest, ByteArrayHelper.ToByteArray(type));
         }
 
         /// <inheritdoc cref="Command.InactiveSource"/>
@@ -132,7 +143,7 @@ namespace AleRoe.CecSharp
                 ByteArrayHelper.ToByteArray(version));
         }
 
-        /// <inheritdoc cref="Command.CecVersion"/>
+        /// <inheritdoc cref="Command.ReportPowerStatus"/>
         /// <param name="source">The <c>CecMessage</c> source.</param>
         /// <param name="destination">The <c>CecMessage</c> destination.</param>
         /// <param name="status">The <c>PowerStatus</c> value.</param>
@@ -151,6 +162,236 @@ namespace AleRoe.CecSharp
         public static CecMessage Polling(LogicalAddress source)
         {
             return new CecMessage(source, source);
+        }
+
+        /// <inheritdoc cref="Command.SetMenuLanguage"/>
+        /// <param name="source">The <c>CecMessage</c> source.</param>
+        /// <param name="language">The ISO-639-2 language code.</param>
+        /// <returns>A <c>CecMessage</c> that represents the command.</returns>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static CecMessage SetMenuLanguage(LogicalAddress source, [NotNull] string language)
+        {
+            if (string.IsNullOrEmpty(language))
+                throw new ArgumentNullException(nameof(language));
+
+            if (!IsValidLanguageCode(language))
+                throw new ArgumentException("The language code is invalid", nameof(language));
+            
+            return new CecMessage(source, LogicalAddress.Unregistered, Command.SetMenuLanguage, ByteArrayHelper.ToByteArray(language));
+        }
+
+        /// <inheritdoc cref="Command.GetMenuLanguage"/>
+        /// <param name="source">The <c>CecMessage</c> source.</param>
+        /// <param name="destination">The <c>CecMessage</c> destination.</param>
+        /// <returns>A <c>CecMessage</c> that represents the command.</returns>
+        public static CecMessage GetMenuLanguage(LogicalAddress source, LogicalAddress destination)
+        {
+            return new CecMessage(source, destination, Command.GetMenuLanguage);
+        }
+
+        /// <inheritdoc cref="Command.SetOSDString"/>
+        /// <param name="source">The <c>CecMessage</c> source.</param>
+        /// <param name="destination">The <c>CecMessage</c> destination.</param>
+        /// <param name="displayControl">The display control value.</param>
+        /// <param name="osdString">The osd string to display (max. 13 characters).</param>
+        /// <returns>A <c>CecMessage</c> that represents the command.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        public static CecMessage SetOSDString(LogicalAddress source, DisplayControl displayControl, [NotNull] string osdString)
+        {
+            if (string.IsNullOrEmpty(osdString))
+                throw new ArgumentNullException(nameof(osdString));
+
+            if (osdString.Length > 13)
+                throw new ArgumentException("The string length may not exceed 13 characters.", nameof(osdString));
+            
+            var parameters = ByteArrayHelper.ToByteArray(displayControl)
+                .Concat(ByteArrayHelper.ToByteArray(osdString)).ToArray();
+
+            return new CecMessage(source, LogicalAddress.TV, Command.SetOSDString, parameters);
+        }
+
+        /// <inheritdoc cref="Command.GiveOsdName"/>
+        /// <param name="source">The <c>CecMessage</c> source.</param>
+        /// <param name="destination">The <c>CecMessage</c> destination.</param>
+        /// <returns>A <c>CecMessage</c> that represents the command.</returns>
+        public static CecMessage GiveOsdName(LogicalAddress source, LogicalAddress destination)
+        {
+            return new CecMessage(source, destination, Command.GiveOsdName);
+        }
+
+        /// <inheritdoc cref="Command.RequestActiveSource"/>
+        /// <param name="source">The <c>CecMessage</c> source.</param>
+        /// <returns>A <c>CecMessage</c> that represents the command.</returns>
+        public static CecMessage RequestActiveSource(LogicalAddress source)
+        {
+            return new CecMessage(source, LogicalAddress.Unregistered, Command.RequestActiveSource);
+        }
+
+        /// <inheritdoc cref="Command.SetStreamPath"/>
+        /// <param name="physicalAddress">The physical address.</param>
+        /// <returns>A <c>CecMessage</c> that represents the command.</returns>
+        public static CecMessage SetStreamPath(PhysicalAddress physicalAddress)
+        {
+            return new CecMessage(LogicalAddress.TV, LogicalAddress.Unregistered, Command.SetStreamPath,
+                ByteArrayHelper.ToByteArray(physicalAddress.Address));
+        }
+
+        /// <inheritdoc cref="Command.RoutingChange"/>
+        /// <param name="source">The <c>CecMessage</c> source.</param>
+        /// <param name="originalAddress">The original physical address.</param>
+        /// <param name="newAddress">The new physical address.</param>
+        /// <returns>A <c>CecMessage</c> that represents the command.</returns>
+        public static CecMessage RoutingChange(LogicalAddress source, PhysicalAddress originalAddress, PhysicalAddress newAddress)
+        {
+            var parameters = ByteArrayHelper.ToByteArray(originalAddress.Address)
+                .Concat(ByteArrayHelper.ToByteArray(newAddress.Address)).ToArray();
+            return new CecMessage(source, LogicalAddress.Unregistered, Command.RoutingChange, parameters);
+        }
+
+        /// <inheritdoc cref="Command.RoutingInformation"/>
+        /// <param name="source">The <c>CecMessage</c> source.</param>
+        /// <param name="physicalAddress">The physical address.</param>
+        /// <returns>A <c>CecMessage</c> that represents the command.</returns>
+        public static CecMessage RoutingInformation(LogicalAddress source, PhysicalAddress physicalAddress)
+        {
+            return new CecMessage(source, LogicalAddress.Unregistered, Command.RoutingInformation, ByteArrayHelper.ToByteArray(physicalAddress.Address));
+        }
+
+        /// <inheritdoc cref="Command.GiveDevicePowerStatus"/>
+        /// <param name="source">The <c>CecMessage</c> source.</param>
+        /// <param name="destination">The <c>CecMessage</c> destination.</param>
+        /// <returns>A <c>CecMessage</c> that represents the command.</returns>
+        public static CecMessage GiveDevicePowerStatus(LogicalAddress source, LogicalAddress destination)
+        {
+            return new CecMessage(source, destination, Command.GiveDevicePowerStatus);
+        }
+
+        /// <inheritdoc cref="Command.GiveDeviceVendorId"/>
+        /// <param name="source">The <c>CecMessage</c> source.</param>
+        /// <param name="destination">The <c>CecMessage</c> destination.</param>
+        /// <returns>A <c>CecMessage</c> that represents the command.</returns>
+        public static CecMessage GiveDeviceVendorId(LogicalAddress source, LogicalAddress destination)
+        {
+            return new CecMessage(source, destination, Command.GiveDeviceVendorId);
+        }
+
+        /// <inheritdoc cref="Command.VendorCommand"/>
+        /// <param name="source">The <c>CecMessage</c> source.</param>
+        /// <param name="destination">The <c>CecMessage</c> destination.</param>
+        /// <param name="data">The data.</param>
+        /// <returns>A <c>CecMessage</c> that represents the command.</returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static CecMessage VendorCommand(LogicalAddress source, LogicalAddress destination, byte[] data)
+        {
+            if (data.Length > 14 || data.Length == 0)
+                throw new ArgumentException("Data must be between 1 and 14 bytes", nameof(data));
+            
+            return new CecMessage(source, destination, Command.VendorCommand, data);
+        }
+
+        /// <inheritdoc cref="Command.VendorCommand"/>
+        /// <param name="source">The <c>CecMessage</c> source.</param>
+        /// <param name="destination">The <c>CecMessage</c> destination.</param>
+        /// <param name="data">The data.</param>
+        /// <returns>A <c>CecMessage</c> that represents the command.</returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static CecMessage VendorCommand(LogicalAddress source, LogicalAddress destination, string data)
+            => CecMessageBuilder.VendorCommand(source, destination, ByteArrayHelper.ToByteArray(data));
+
+        /// <inheritdoc cref="Command.VendorCommandWithId"/>
+        /// <param name="source">The <c>CecMessage</c> source.</param>
+        /// <param name="destination">The <c>CecMessage</c> destination.</param>
+        /// <param name="vendorId">The Vendor Id.</param>
+        /// <param name="data">The data.</param>
+        /// <returns>A <c>CecMessage</c> that represents the command.</returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static CecMessage VendorCommandWithId(LogicalAddress source, LogicalAddress destination, int vendorId, byte[] data)
+        {
+            if (data.Length > 14 || data.Length == 0)
+                throw new ArgumentException("Data must be between 1 and 14 bytes", nameof(data));
+
+            var parameters = ByteArrayHelper.ToByteArray(vendorId, "X6")
+                .Concat(data).ToArray();
+
+            return new CecMessage(source, destination, Command.VendorCommandWithId, parameters);
+        }
+
+        /// <inheritdoc cref="Command.VendorCommandWithId"/>
+        /// <param name="source">The <c>CecMessage</c> source.</param>
+        /// <param name="destination">The <c>CecMessage</c> destination.</param>
+        /// <param name="vendorId">The Vendor Id.</param>
+        /// <param name="data">The data.</param>
+        /// <returns>A <c>CecMessage</c> that represents the command.</returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static CecMessage VendorCommandWithId(LogicalAddress source, LogicalAddress destination, int vendorId, string data)
+            => CecMessageBuilder.VendorCommandWithId(source, destination, vendorId, ByteArrayHelper.ToByteArray(data));
+
+        /// <inheritdoc cref="Command.VendorRemoteButtonDown"/>
+        /// <param name="source">The <c>CecMessage</c> source.</param>
+        /// <param name="destination">The <c>CecMessage</c> destination.</param>
+        /// <param name="data">The data.</param>
+        /// <returns>A <c>CecMessage</c> that represents the command.</returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static CecMessage VendorRemoteButtonDown(LogicalAddress source, LogicalAddress destination, byte[] data)
+        {
+            if (data.Length > 14 || data.Length == 0)
+                throw new ArgumentException("Data must be between 1 and 14 bytes", nameof(data));
+
+            return new CecMessage(source, destination, Command.VendorRemoteButtonDown, data);
+        }
+
+        /// <inheritdoc cref="Command.VendorRemoteButtonDown"/>
+        /// <param name="source">The <c>CecMessage</c> source.</param>
+        /// <param name="destination">The <c>CecMessage</c> destination.</param>
+        /// <param name="data">The data.</param>
+        /// <returns>A <c>CecMessage</c> that represents the command.</returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static CecMessage VendorRemoteButtonDown(LogicalAddress source, LogicalAddress destination, string data)
+            => CecMessageBuilder.VendorRemoteButtonDown(source, destination, ByteArrayHelper.ToByteArray(data));
+
+        /// <inheritdoc cref="Command.VendorRemoteButtonUp"/>
+        /// <param name="source">The <c>CecMessage</c> source.</param>
+        /// <param name="destination">The <c>CecMessage</c> destination.</param>
+        /// <returns>A <c>CecMessage</c> that represents the command.</returns>
+        public static CecMessage VendorRemoteButtonUp(LogicalAddress source, LogicalAddress destination)
+        {
+            return new CecMessage(source, destination, Command.VendorRemoteButtonUp);
+        }
+
+        /// <inheritdoc cref="Command.StandBy"/>
+        /// <param name="source">The <c>CecMessage</c> source.</param>
+        /// <param name="destination">The <c>CecMessage</c> destination.</param>
+        /// <returns>A <c>CecMessage</c> that represents the command.</returns>
+        public static CecMessage Standby(LogicalAddress source, LogicalAddress destination)
+        {
+            return new CecMessage(source, destination, Command.StandBy);
+        }
+
+        /// <inheritdoc cref="Command.UserControlPressed"/>
+        /// <param name="source">The <c>CecMessage</c> source.</param>
+        /// <param name="destination">The <c>CecMessage</c> destination.</param>
+        /// <param name="command">The <see cref="UiCommand"/> command.</param>
+        /// <returns>A <c>CecMessage</c> that represents the command.</returns>
+        public static CecMessage UserControlPressed(LogicalAddress source, LogicalAddress destination, UiCommand command)
+        {
+            return new CecMessage(source, destination, Command.UserControlPressed, ByteArrayHelper.ToByteArray(command));
+        }
+
+        /// <inheritdoc cref="Command.UserControlReleased"/>
+        /// <param name="source">The <c>CecMessage</c> source.</param>
+        /// <param name="destination">The <c>CecMessage</c> destination.</param>
+        /// <returns>A <c>CecMessage</c> that represents the command.</returns>
+        public static CecMessage UserControlReleased(LogicalAddress source, LogicalAddress destination)
+        {
+            return new CecMessage(source, destination, Command.UserControlReleased);
+        }
+
+        private static bool IsValidLanguageCode(string value)
+        {
+            return CultureInfo.GetCultures(CultureTypes.NeutralCultures)
+                .Any(x => x.ThreeLetterISOLanguageName == value);
         }
     }
 }
