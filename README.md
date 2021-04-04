@@ -66,7 +66,7 @@ public static class CecMessageBuilder
     public static CecMessage VendorCommandWithId(LogicalAddress source, LogicalAddress destination, int vendorId, byte[] data);
     public static CecMessage VendorCommandWithId(LogicalAddress source, LogicalAddress destination, int vendorId, string data);
     public static CecMessage VendorRemoteButtonDown(LogicalAddress source, LogicalAddress destination, byte[] data);
-    public static CecMessage VendorRemoteButtonDown(LogicalAddress source, LogicalAddress destination, string data)
+    public static CecMessage VendorRemoteButtonDown(LogicalAddress source, LogicalAddress destination, string data);
     public static CecMessage VendorRemoteButtonUp(LogicalAddress source, LogicalAddress destination);
     public static CecMessage Standby(LogicalAddress source, LogicalAddress destination);
     public static CecMessage UserControlPressed(LogicalAddress source, LogicalAddress destination, UiCommand command);
