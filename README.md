@@ -1,4 +1,4 @@
-# CecSharp
+ # CecSharp
 A .net class library to facilitate HDMI-CEC communications. 
 
 ## Overview
@@ -12,6 +12,7 @@ Install-Package AleRoe.CecSharp
 ## Basic Usage
 CecSharp provides an object model for dealing with HDMI-CEC messages as well as emulating a HDMI-CEC device. The static `CecMessageBuilder` class can be used to create arbitrary HDMI-CEC frames which can be used to control devices on the HDMI-CEC bus. 
 The `CecDevice` class represents a HDMI-CEC enabled device capable of responding to incoming HDMI-CEC messages via the `ProcessCecMessage` method.
+
 
 ### CecDevice
 To emulate a HDMI-CEC device, create a new `CecDevice` instance, specifying the device type, name, vendor, physical- and logical address. Use the `ProcessCecMessage()` and `ToCec()`methods to get the appropriate response depending on the device settings. Not all input messages will generate a response (like UserControlPressed, UserControlReleased or StandBy and messages not intended for this device) and instead return `CecMessage.None`.
@@ -50,6 +51,26 @@ public static class CecMessageBuilder
     public static CecMessage CecVersion(LogicalAddress source, LogicalAddress destination, CecVersion version);
     public static CecMessage ReportPowerStatus(LogicalAddress source, LogicalAddress destination, PowerStatus status);
     public static CecMessage Polling(LogicalAddress source);
+    public static CecMessage SetMenuLanguage(LogicalAddress source, [NotNull] string language);
+    public static CecMessage GetMenuLanguage(LogicalAddress source, LogicalAddress destination);
+    public static CecMessage SetOSDString(LogicalAddress source, DisplayControl displayControl, [NotNull] string osdString);
+    public static CecMessage GiveOsdName(LogicalAddress source, LogicalAddress destination);
+    public static CecMessage RequestActiveSource(LogicalAddress source);
+    public static CecMessage SetStreamPath(PhysicalAddress physicalAddress);
+    public static CecMessage RoutingChange(LogicalAddress source, PhysicalAddress originalAddress, PhysicalAddress newAddress);
+    public static CecMessage RoutingInformation(LogicalAddress source, PhysicalAddress physicalAddress);
+    public static CecMessage GiveDevicePowerStatus(LogicalAddress source, LogicalAddress destination);
+    public static CecMessage GiveDeviceVendorId(LogicalAddress source, LogicalAddress destination);
+    public static CecMessage VendorCommand(LogicalAddress source, LogicalAddress destination, byte[] data);
+    public static CecMessage VendorCommand(LogicalAddress source, LogicalAddress destination, string data);
+    public static CecMessage VendorCommandWithId(LogicalAddress source, LogicalAddress destination, int vendorId, byte[] data);
+    public static CecMessage VendorCommandWithId(LogicalAddress source, LogicalAddress destination, int vendorId, string data);
+    public static CecMessage VendorRemoteButtonDown(LogicalAddress source, LogicalAddress destination, byte[] data);
+    public static CecMessage VendorRemoteButtonDown(LogicalAddress source, LogicalAddress destination, string data)
+    public static CecMessage VendorRemoteButtonUp(LogicalAddress source, LogicalAddress destination);
+    public static CecMessage Standby(LogicalAddress source, LogicalAddress destination);
+    public static CecMessage UserControlPressed(LogicalAddress source, LogicalAddress destination, UiCommand command);
+    public static CecMessage UserControlReleased(LogicalAddress source, LogicalAddress destination);
 }
 ```
 Use the `.ToCec()` extension method to get the actual CEC-Message.
@@ -62,5 +83,20 @@ var message = CecMessageBuilder.ActiveSource(LogicalAddress.Unregistered, Physic
 var cec = message.ToCec();
 // cec = "FF:82:20:00"
 ```
+
+### Update v1.2.0
+CecSharp now fully supports the following HDMI-CEC features and their related commands for both `CecMessageBuilder` and `ProcessCecMessage` (where applicable):
+
+* System Information
+* OSD Display
+* Device OSD Name Transfer
+* Device Power Status
+* Routing Control
+* Vendor Specific Command
+* System Standby
+* Device Menu Control
+* Abort
+
+
 ## Feedback
 Please let me know if you are using this library and have any suggestions or questions.
