@@ -126,6 +126,18 @@ namespace AleRoe.CecSharp
         public string Language { get; internal set; } = CultureInfo.CurrentUICulture.ThreeLetterISOLanguageName;
 
         /// <summary>
+        /// Tries to process a <see cref="CecMessage"/> and returns <c>true</c> if the response is not <c>CecMessage.None</c>
+        /// </summary>
+        /// <param name="message">The message to process</param>
+        /// <param name="response"></param>
+        /// <returns>Returns <c>true</c> when the response in not <c>CecMessage.None</c></returns>
+        public bool TryProcessCecMessage(CecMessage message, out CecMessage response)
+        {
+            response = ProcessCecMessage(message);
+            return response != CecMessage.None;
+        }
+
+        /// <summary>
         /// Processes an incoming CecMessage according to CEC Specifications
         /// </summary>
         /// <param name="message">A <see cref="CecMessage"/> request message.</param>
