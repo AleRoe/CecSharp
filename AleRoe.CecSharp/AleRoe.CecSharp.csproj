@@ -8,7 +8,7 @@
     <Description>A class library to faciliate HDMI-CEC communications.</Description>
     <PackageProjectUrl>https://aleroe.github.io/CecSharp/</PackageProjectUrl>
     <PackageOutputPath>C:\Users\Alexander\Source\LocalPackages</PackageOutputPath>
-    <Version>1.2.0</Version>
+    <Version>1.2.1</Version>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <Company>AleRoe</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -17,8 +17,8 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageTags>cec;dotnet;hdmi-cec</PackageTags>
     <PackageLicenseFile></PackageLicenseFile>
-    <AssemblyVersion>1.2.0.0</AssemblyVersion>
-    <FileVersion>1.2.0.0</FileVersion>
+    <AssemblyVersion>1.2.1.0</AssemblyVersion>
+    <FileVersion>1.2.1.0</FileVersion>
   </PropertyGroup>
   
   <ItemGroup>
