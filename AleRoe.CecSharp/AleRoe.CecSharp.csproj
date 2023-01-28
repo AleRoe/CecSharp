@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net5.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net7.0;netstandard2.1</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Alexander Röthinger</Authors>
     <Copyright>Alexander Röthinger, 2021</Copyright>
     <Description>A class library to faciliate HDMI-CEC communications.</Description>
     <PackageProjectUrl>https://aleroe.github.io/CecSharp/</PackageProjectUrl>
     <PackageOutputPath>C:\Users\Alexander\Source\LocalPackages</PackageOutputPath>
-    <Version>1.2.2</Version>
+    <Version>2.0.0</Version>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <Company>AleRoe</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
