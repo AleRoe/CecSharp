@@ -143,6 +143,20 @@ namespace AleRoe.CecSharp.Tests
         }
 
         [Test]
+        public void ParseTest8()
+        {
+            //var msg = "cec:message A 11:21:13.200 81:83#";
+            var msg = "81:83#";
+            CecMessage message = default;
+
+            Assert.DoesNotThrow(() => message = CecMessage.Parse(msg));
+            Assert.AreEqual(LogicalAddress.PlaybackDevice2, message.Source);
+            Assert.AreEqual(LogicalAddress.RecordingDevice1, message.Destination);
+            Assert.AreEqual(Command.GivePhysicalAddress, message.Command);
+            Assert.IsTrue(message.IsAcknowledged());
+        }
+
+        [Test]
         public void EqualsTest_NoneValuesAreEqual()
         {
             CecMessage message1 = CecMessage.None;
