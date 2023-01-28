@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net7.0;netstandard2.1</TargetFrameworks>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>Alexander Röthinger</Authors>
     <Copyright>Alexander Röthinger, 2021</Copyright>
     <Description>A class library to faciliate HDMI-CEC communications.</Description>
