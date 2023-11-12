@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29509.3
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AleRoe.CecSharp", "AleRoe.CecSharp\AleRoe.CecSharp.csproj", "{B693268F-1B09-4AA3-96E2-18A24ABB5F65}"
 EndProject

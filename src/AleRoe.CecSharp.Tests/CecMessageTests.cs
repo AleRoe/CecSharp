@@ -203,7 +203,6 @@ namespace AleRoe.CecSharp.Tests
         {
             var message1 = CecMessage.None;
             var message2 = Guid.NewGuid();
-            Assert.AreNotEqual(message1, message2);
             Assert.IsFalse(message1.Equals(message2));
             Assert.IsFalse(Equals(message1, message2));
         }
