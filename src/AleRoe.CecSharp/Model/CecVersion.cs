@@ -10,6 +10,7 @@
         Version12A = 0x02,
         Version13 = 0x03,
         Version13A = 0x04,
-        Version14 = 0x05
+        Version14 = 0x05,
+        Version20 = 0x06
     }
 }
