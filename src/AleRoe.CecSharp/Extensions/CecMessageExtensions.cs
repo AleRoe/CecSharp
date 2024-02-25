@@ -1,5 +1,9 @@
-﻿using System.Text;
+﻿using System;
+using System.Globalization;
+using System.Linq;
+using System.Text;
 using AleRoe.CecSharp.Model;
+using MoreLinq;
 
 namespace AleRoe.CecSharp.Extensions
 {
@@ -39,9 +43,18 @@ namespace AleRoe.CecSharp.Extensions
             return value.Command switch
             {
                 Command.None => "Polling",
-                Command.SetOSDName => $"{command} - OSD Name: {value.Parameters.ToASCIIString()}",
+                Command.SetOSDName => $"{command} - Name: {value.Parameters.ToASCIIString()}",
+                Command.ReportPhysicalAddress => $"{command} - Address: {value.Parameters.Take(2).ToArray().ToPhysicalAddressString()} Type: {Enum.GetName<DeviceType>((DeviceType)value.Parameters[2])}",
+                Command.ReportPowerStatus => $"{command} - Status: {Enum.GetName<PowerStatus>((PowerStatus)value.Parameters[0])}",
+                Command.DeviceVendorId => $"{command} - Id: {int.Parse(BitConverter.ToString(value.Parameters).Replace("-",""), NumberStyles.HexNumber)}",
+                Command.CecVersion => $"{command} - Version: {Enum.GetName<CecVersion>((CecVersion)value.Parameters[0])}",
                 _ => command,
             };
+        }
+
+        private static string ToPhysicalAddressString(this byte[] value)
+        {
+            return BitConverter.ToString(value).Replace("-","").ToCharArray().ToDelimitedString("."); 
         }
     }
 }
