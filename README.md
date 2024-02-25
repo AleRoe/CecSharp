@@ -84,8 +84,12 @@ var cec = message.ToCec();
 // cec = "FF:82:20:00"
 ```
 
+### Update v2.0.0
+Library now targets net 8.0 only.
+
+
 ### Update v1.4.0
-Support for netstandard 2.1 remove. Library now targets net 7.0 only.
+Support for netstandard 2.1 removed. Library now targets net 7.0 only.
 
 ### Update v1.2.0
 CecSharp now fully supports the following HDMI-CEC features and their related commands for both `CecMessageBuilder` and `ProcessCecMessage` (where applicable):
